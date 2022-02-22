@@ -1,19 +1,11 @@
+// Server Model: It has all the express server + socket.io configured
+const Server = require('./models/server.model');
+
+// Package to read and stablish environment variables
 require('dotenv').config();
-const express = require('express');
-const http = require('http');
-const { port, nodeEnv } = require('./config/index');
-const { connectToDb } = require('./config/database');
 
-const app = express();
-const PORT = port;
+// Initialize server instance
+const server = new Server();
 
-connectToDb();
-
-app.use(express.json());
-
-const routes = require('./routes/index');
-app.use('/', routes);
-
-const server = http.createServer(app);
-
-server.listen(PORT, () => console.log(`Server running in ${nodeEnv} mode on port ${PORT}`));
+// Execute server
+server.execute();
