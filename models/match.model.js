@@ -23,7 +23,16 @@ const MatchSchema = Schema({
   turns: {
     type: Number,
     required: true,
-    default: 0,
+    default: 1,
+  },
+  cardsSelected: {
+    type: [CardSchema],
+  },
+  healthPlayer1: {
+    type: Number,
+  },
+  healthPlayer2: {
+    type: Number,
   },
   winner: {
     type: Schema.Types.ObjectId,

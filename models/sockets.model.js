@@ -5,6 +5,10 @@ const {
   cancelGame,
   getMatches,
   joinGame,
+  playGame,
+  cardSelect,
+  cardBattle,
+  finishGame,
 } = require('../controllers/sockets.controller');
 const { comprobarJWT } = require('../helpers/jwt');
 
@@ -34,10 +38,10 @@ class Sockets {
 
       // Listen to create room
       socket.on('create-game', async () => {
-        console.log(user.nickname, ' create a room');
         const game = await createGame(user.id);
         socket.join(`${game._id} game`);
         console.log(socket.rooms);
+        console.log(user.nickname, ' create a room');
         socket.emit('created-game', game);
         this.io.emit('games-list', await getMatches());
       });
@@ -56,10 +60,37 @@ class Sockets {
       socket.on('cancel-game', async (gameId) => {
         console.log(gameId, ' game canceled');
         const game = await cancelGame(gameId);
-        /* socket.emit('canceled-game'); */
         this.io.in(`${game._id} game`).emit('canceled-game');
-        /* socket.leave(`${game._id} game`); */
         this.io.emit('games-list', await getMatches());
+      });
+
+      // Listen to play game event
+      socket.on('play-game', async (gameId) => {
+        console.log(gameId, ' game started');
+        const game = await playGame(gameId);
+        this.io.in(`${game._id} game`).emit('started-game', game);
+        this.io.emit('games-list', await getMatches());
+      });
+
+      // Listen to card-selected
+      socket.on('select-card', async (cardSelected, gameId) => {
+        console.log('Card was selected');
+        const game = await cardSelect(cardSelected, gameId);
+        this.io.in(`${game._id} game`).emit('selected-card', game);
+      });
+
+      // Listen to battle-card
+      socket.on('battle-card', async (cardsSelected, gameId) => {
+        console.log('Cards are fighting');
+        const game = await cardBattle(cardsSelected, gameId);
+        this.io.in(`${game._id} game`).emit('selected-card', game);
+      });
+
+      // Listen to finish-game
+      socket.on('finish-game', async (gameId) => {
+        console.log('Game finished');
+        const game = await finishGame(gameId);
+        this.io.in(`${game._id} game`).emit('finished-game');
       });
 
       // All the events when user disconnect

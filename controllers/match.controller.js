@@ -12,9 +12,11 @@ const getMatches = async (req = request, res = response) => {
         deckPlayer2: 0,
         __v: 0,
       }
-    ).sort({
-      status: -1,
-    });
+    )
+      .sort({
+        status: -1,
+      })
+      .populate('player1');
 
     res.json({
       ok: true,
