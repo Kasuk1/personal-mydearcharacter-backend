@@ -152,7 +152,6 @@ const cardBattle = async (cardsSelected, gameId) => {
       .populate('player2');
     matchFinal.cardsSelected = [];
     await matchFinal.save();
-    console.log(matchFinal);
 
     return matchFinal;
   } catch (err) {
