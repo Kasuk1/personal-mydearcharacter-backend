@@ -41,7 +41,7 @@ class Sockets {
         const game = await createGame(user.id);
         socket.join(`${game._id} game`);
         /* console.log(socket.rooms); */
-        console.log(user.nickname, ' create a room');
+        /* console.log(user.nickname, ' create a room'); */
         socket.emit('created-game', game);
         this.io.emit('games-list');
       });
