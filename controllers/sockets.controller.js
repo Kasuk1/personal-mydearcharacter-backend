@@ -28,7 +28,8 @@ const getMatches = async () => {
     .sort({
       status: -1,
     })
-    .populate('player1');
+    .populate('player1')
+    .populate('player2');
   return matches;
 };
 

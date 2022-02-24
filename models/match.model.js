@@ -39,6 +39,10 @@ const MatchSchema = Schema({
     ref: 'User',
     required: false,
   },
+  date: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = model('Match', MatchSchema);

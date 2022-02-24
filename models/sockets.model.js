@@ -43,7 +43,7 @@ class Sockets {
         console.log(socket.rooms);
         console.log(user.nickname, ' create a room');
         socket.emit('created-game', game);
-        this.io.emit('games-list', await getMatches());
+        this.io.emit('games-list');
       });
 
       // Listen to join game(room)
@@ -53,7 +53,7 @@ class Sockets {
         socket.join(`${game._id} game`);
         console.log(socket.rooms);
         this.io.in(`${game._id} game`).emit('joined-game', game);
-        this.io.emit('games-list', await getMatches());
+        this.io.emit('games-list');
       });
 
       // Listen to cancel game or delete room
@@ -61,7 +61,7 @@ class Sockets {
         console.log(gameId, ' game canceled');
         const game = await cancelGame(gameId);
         this.io.in(`${game._id} game`).emit('canceled-game');
-        this.io.emit('games-list', await getMatches());
+        this.io.emit('games-list');
       });
 
       // Listen to play game event
@@ -69,7 +69,7 @@ class Sockets {
         console.log(gameId, ' game started');
         const game = await playGame(gameId);
         this.io.in(`${game._id} game`).emit('started-game', game);
-        this.io.emit('games-list', await getMatches());
+        this.io.emit('games-list');
       });
 
       // Listen to card-selected
@@ -91,6 +91,7 @@ class Sockets {
         console.log('Game finished');
         const game = await finishGame(gameId);
         this.io.in(`${game._id} game`).emit('finished-game');
+        this.io.emit('games-list', await getMatches());
       });
 
       // All the events when user disconnect

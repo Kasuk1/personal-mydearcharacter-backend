@@ -13,10 +13,9 @@ const getMatches = async (req = request, res = response) => {
         __v: 0,
       }
     )
-      .sort({
-        status: -1,
-      })
-      .populate('player1');
+      .sort({ date: -1 })
+      .populate('player1')
+      .populate('player2');
 
     res.json({
       ok: true,
@@ -31,4 +30,29 @@ const getMatches = async (req = request, res = response) => {
   }
 };
 
-module.exports = { getMatches };
+// Get matches by user id
+const getMatchesByUserId = async (req = request, res = response) => {
+  const { userId } = req.params;
+
+  try {
+    const matches = await Match.find({
+      $or: [{ player1: userId }, { player2: userId }],
+    })
+      .sort({ date: -1 })
+      .populate('player1')
+      .populate('player2');
+
+    res.json({
+      ok: true,
+      matches,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      ok: false,
+      msg: 'Report to the admin',
+    });
+  }
+};
+
+module.exports = { getMatches, getMatchesByUserId };
