@@ -6,7 +6,7 @@ const Match = require('../models/match.model');
 const getMatches = async (req = request, res = response) => {
   try {
     const matches = await Match.find(
-      { status: { $ne: 'cancelled' } },
+      { status: { $nin: ['cancelled', 'finished'] } },
       {
         deckPlayer1: 0,
         deckPlayer2: 0,
@@ -37,6 +37,7 @@ const getMatchesByUserId = async (req = request, res = response) => {
   try {
     const matches = await Match.find({
       $or: [{ player1: userId }, { player2: userId }],
+      status: { $ne: 'cancelled' },
     })
       .sort({ date: -1 })
       .populate('player1')

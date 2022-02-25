@@ -18,7 +18,7 @@ const userDisconnected = async (uid) => {
 
 const getMatches = async () => {
   const matches = await Match.find(
-    { status: { $ne: 'cancelled' } },
+    { status: { $nin: ['cancelled', 'finished'] } },
     {
       deckPlayer1: 0,
       deckPlayer2: 0,
