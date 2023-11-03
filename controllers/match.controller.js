@@ -39,7 +39,7 @@ const getMatchesByUserId = async (req = request, res = response) => {
       $or: [{ player1: userId }, { player2: userId }],
       status: { $ne: 'cancelled' },
     })
-      .sort({ date: -1 })
+      .sort({ date: 'desc' })
       .populate('player1')
       .populate('player2');
 
